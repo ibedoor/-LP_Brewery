@@ -134,6 +134,7 @@ barplot(sol2$solution,
 
 
 
-## As we see here total profit with Grape just 953.5$ and take 20 hours per pack,
+## Final Results
+As we see here total profit with Grape just 953.5$ and take 20 hours per pack,
 without Grape total profit 800$, so Grape takes more time and profits less than
 expected.
