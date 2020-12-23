@@ -1,0 +1,139 @@
+---
+title: "LP Brewery"
+output: html_document
+---
+
+
+This is an R Markdown document to build a report for LP Brewery telling them all the information from their new problem with Grape and their previous problem before Grape
+
+## Install important library
+```{r}
+#install.packages("lpSolve")
+library(lpSolve)
+```
+
+## Save the profit for each soda
+```{r}
+# profit
+obj_coef <- c(13,23,30)
+# without Grape
+obj_coe2<- c(13,23)
+```
+
+## Matrix for CO2, Water, Flavor, and hours for each soda
+```{r}
+# matrix
+con <- matrix(c(
+  5,15,10,
+  4,4,4,
+  35,20,15,
+  5,10,20
+), nrow = 4, byrow = TRUE)
+
+# without Grape
+con2 <- matrix(c(
+  5,15,
+  4,4,
+  35,20,
+  5,10
+), nrow = 4, byrow = TRUE)
+```
+
+## Directions
+```{r}
+# directions
+dir <- c("<=",
+         "<=",
+         "<=",
+         "<="
+         )
+```
+
+## Resouces for all soda should be less that 480 for CO2, 160 for water,
+1190 for flavor, and in 3 months
+```{r}
+# resources
+res <- c(480,
+         160,
+         1190,
+         500
+         )
+```
+
+# Claculte the max
+```{r}
+sol <- lp(
+  "max",
+  obj_coef,
+  con,
+  dir,
+  res
+  )
+
+# without Grape
+sol2 <- lp(
+  "max",
+  obj_coe2,
+  con2,
+  dir,
+  res
+)
+```
+
+## Value of objective function
+```{r}
+sol$objval
+```
+# The total profit in 3 months with Grape it will be 953.6$
+
+## Objective values of Strawberry, Orange, and Grape
+```{r}
+sol$solution
+```
+# The amount of each type of soda here we have: 5.6 of Strawberry,
+21.6 of Orange, and 12.8 of Grape
+
+## Visualize Amount of each type of soda with Grape
+```{r}
+barplot(sol$solution,
+     main ="Amount of each type of Soda",
+     names.arg = c("Strawberry", "Orange", "Grape"),
+     col = "blue",
+     density = 20
+     )
+```
+<p align="center">
+  <img width="800" height="500" src="with_Grape.png">
+</p>
+
+## Value of objective function without Grape
+```{r}
+sol2$objval
+```
+# The total profit in 3 months without Grape it will be 800$
+
+## Objective values of Strawberry, Orange
+```{r}
+sol2$solution
+```
+# The amount of each type of soda here we have: 12 of Strawberry,
+28 of Orange
+
+## Visualize Amount of each type of soda without Grape
+```{r}
+barplot(sol2$solution,
+     main ="Amount of each type of Soda",
+     names.arg = c("Strawberry", "Orange"),
+     col = "blue",
+     density = 20
+     )
+```
+<p align="center">
+  <img width="800" height="500" src="without_Grape.png">
+</p>
+
+
+
+## As we see here total profit with Grape just 953.5$ and take 20 hours per pack,
+without Grape total profit 800$, so Grape takes more time and profits less than
+expected.
